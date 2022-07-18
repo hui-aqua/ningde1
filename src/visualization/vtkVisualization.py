@@ -97,11 +97,8 @@ def save_vtk(point:list,element:list,out_name:str):
     out_data.SetPoints(Points)
     out_data.SetPolys(Cells)
     out_data.Modified()
+    
     writer = vtk.vtkXMLPolyDataWriter();
     writer.SetFileName(str(out_name)+".vtp")
-    if vtk.VTK_MAJOR_VERSION <= 5:
-        out_data.Update()
-        writer.SetInput(out_data)
-    else:
-        writer.SetInputData(out_data)
+    writer.SetInputData(out_data)
     writer.Write()

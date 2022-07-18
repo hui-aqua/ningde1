@@ -10,8 +10,8 @@ import numpy as np
 
 cr_top=1.75/2.0   #[m]
 cage_height=1.5   #[m]
-NT=64#64
-NN=17#17
+NT=32#64
+NN=8#17
 
 
 def gen_points():
