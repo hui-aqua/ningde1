@@ -7,6 +7,8 @@ p=geo.gen_points()
 pv.show_point(p)
 
 
+geo.NN=17
+geo.NT=64
 
 point,lines,surfs =geo.gen_cage()
 print(point)

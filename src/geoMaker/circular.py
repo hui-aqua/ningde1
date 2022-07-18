@@ -8,13 +8,14 @@ please email: hui.cheng@uis.no \n
 
 import numpy as np
 
+# default golbalvalues, can be changed.
 cr_top=1.75/2.0   #[m]
 cage_height=1.5   #[m]
 NT=32#64
 NN=8#17
 
-
-def gen_points():
+## private function
+def __gen_points():
     point_one_cage=[]
     for i in range(0, NT):
         for j in range(NN+1):
@@ -24,7 +25,7 @@ def gen_points():
                  - j * cage_height / float(NN)])
     return point_one_cage
 
-def gen_lines():
+def __gen_lines():
     ##todo  check it
     line_element=[]
     for i in range(NN):
@@ -38,7 +39,7 @@ def gen_lines():
             line_element.append([1+i+j*(NN), 1+1+i+j*(NN)])
     return line_element
 
-def gen_surfs():
+def __gen_surfs():
     ##todo  check it
     surf_element=[]
     
@@ -53,9 +54,9 @@ def gen_surfs():
                                         1+i,1+1+i]) 
     return surf_element
 
-
+# public function
 def gen_cage():
-    points=gen_points()
-    lines=gen_lines()
-    surfs=gen_surfs()
+    points=__gen_points()
+    lines=__gen_lines()
+    surfs=__gen_surfs()
     return points,lines,surfs
