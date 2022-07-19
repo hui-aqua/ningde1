@@ -7,12 +7,12 @@ import src.visualization.saveVtk as sv
 geo.NN=17
 geo.NT=64
 
-point,lines,surfs =geo.gen_cage()
-print(point)
-pv.show_point(point)
 
-sv.p=point
+sv.point,sv.line,sv.face =geo.gen_cage()
 sv.write_vtk('0')
-np.savetxt('point.out',point)
-np.savetxt('lines.out',lines,delimiter=',',fmt='%1u')
-np.savetxt('surfs.out',surfs,delimiter=',',fmt='%1u')
+
+# pv.show_point(sv.point)
+
+np.savetxt('point.out',sv.point)
+np.savetxt('lines.out',sv.line,delimiter=',',fmt='%1u')
+np.savetxt('surfs.out',sv.face,delimiter=',',fmt='%1u')

@@ -42,8 +42,6 @@ class VtkPointCloud:
 def show_point(point_list:list):
     z_min=np.min(np.array(point_list),axis=0)[2]
     z_max=np.max(np.array(point_list),axis=0)[2]
-    print(z_max)
-    print(z_min)
     pointCloud = VtkPointCloud(zMin=z_min,zMax=z_max)
 
     for k in point_list:
@@ -67,38 +65,3 @@ def show_point(point_list:list):
     renderWindow.Render()
     renderWindowInteractor.Start()
 
-def save_vtk(point:list,element:list,out_name:str):
-    Points = vtk.vtkPoints()
-    Cells = vtk.vtkCellArray()
-    one_tri = vtk.vtkTriangle()
-    one_quad=vtk.vtkPolygon()
-    one_quad.GetPointIds().SetNumberOfIds(4)  # make a quad
-    # print(point)
-    for each in point:
-        print(each)
-        Points.InsertNextPoint(each)
-    # generate triangles or quad
-    for each in element:
-        # print(each)
-        if len(each)==3:
-            one_tri.GetPointIds().SetId(0,each[0])
-            one_tri.GetPointIds().SetId(1,each[1])
-            one_tri.GetPointIds().SetId(2,each[2])
-        Cells.InsertNextCell(one_tri)  
-        if len(each)==4:
-            one_quad.GetPointIds().SetId(0,each[0])
-            one_quad.GetPointIds().SetId(1,each[1])
-            one_quad.GetPointIds().SetId(2,each[3])
-            one_quad.GetPointIds().SetId(3,each[2])
-        Cells.InsertNextCell(one_quad)
-        
-    # # out put data
-    out_data = vtk.vtkPolyData()
-    out_data.SetPoints(Points)
-    out_data.SetPolys(Cells)
-    out_data.Modified()
-    
-    writer = vtk.vtkXMLPolyDataWriter();
-    writer.SetFileName(str(out_name)+".vtp")
-    writer.SetInputData(out_data)
-    writer.Write()
