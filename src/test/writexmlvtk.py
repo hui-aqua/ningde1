@@ -31,9 +31,7 @@ from vtkmodules.vtkIOXML import vtkXMLDataSetWriter
 def main():
     filenames = list()
     uGrids = list()
-    print(vtkVertex())
-    print(type(vtkVertex()))
-    
+    print(MakePolyLine())
     uGrids.append(MakeUnstructuredGrid(vtkVertex()))
     filenames.append('Vertex.vtu')
 
@@ -59,6 +57,7 @@ def main():
     filenames.append('Pixel.vtu')
 
     uGrids.append(MakeUnstructuredGrid(vtkQuad()))
+    
     filenames.append('Quad.vtu')
 
     uGrids.append(MakeUnstructuredGrid(vtkTetra()))
@@ -87,6 +86,7 @@ def main():
         # print('Writing: ', filenames[i])
         writer = vtkXMLDataSetWriter()
         writer.SetFileName(filenames[i])
+        
         writer.SetInputData(uGrids[i])
         writer.Write()
 
