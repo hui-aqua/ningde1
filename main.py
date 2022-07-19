@@ -11,7 +11,7 @@ geo.NT = 64
 sv.point, sv.line, sv.face = geo.gen_cage()
 sv.write_vtk('0')
 
-# pv.show_point(sv.point)
+pv.show_point(sv.point)
 
 np.savetxt('point.out', sv.point)
 np.savetxt('lines.out', sv.line, delimiter=',', fmt='%1u')
