@@ -90,15 +90,15 @@ def write_vtk(file_name:str):
     writer = vtkXMLDataSetWriter()
     #u1
     writer.SetInputData(u1)
-    writer.SetFileName(file_name+'-point-.vtu')
+    writer.SetFileName(file_name+'.point.vtu')
     writer.Write()
     
     writer.SetInputData(u2)
-    writer.SetFileName(file_name+'-line-.vtu')
+    writer.SetFileName(file_name+'.line.vtu')
     writer.Write()
     
     writer.SetInputData(u3)
-    writer.SetFileName(file_name+'-face-.vtu')
+    writer.SetFileName(file_name+'.face.vtu')
     writer.Write()    
     
     

@@ -4,22 +4,18 @@ def show_point(point_list:list):
     vtkPolyData = vtk.vtkPolyData()
     points = vtk.vtkPoints()
     vtkCells = vtk.vtkCellArray()
-    vtkDepth = vtk.vtkDoubleArray()
     
-    vtkDepth.SetName('DepthArray')
     vtkPolyData.SetPoints(points)
     vtkPolyData.SetVerts(vtkCells)
-    vtkPolyData.GetPointData().SetScalars(vtkDepth)
+    
     vtkPolyData.GetPointData().SetActiveScalars('DepthArray')
     
     for k in point_list:
         pointId = points.InsertNextPoint(k)
-        vtkDepth.InsertNextValue(k[2])
         vtkCells.InsertNextCell(1)
         vtkCells.InsertCellPoint(pointId)
         vtkCells.Modified()
         points.Modified()
-        vtkDepth.Modified()
  
     mapper = vtk.vtkPolyDataMapper()
     mapper.SetInputData(vtkPolyData)
@@ -31,9 +27,12 @@ def show_point(point_list:list):
     actor.SetMapper(mapper)
     actor.GetProperty().SetPointSize(4)
     
+    axes=vtk.vtkAxesActor()
+    
     # Renderer
     renderer = vtk.vtkRenderer()
     renderer.AddActor(actor)
+    renderer.AddActor(axes)
     renderer.SetBackground(.5, .5, .5)
     renderer.ResetCamera()
     
@@ -48,5 +47,6 @@ def show_point(point_list:list):
     
     # Begin Interaction
     renderWindow.Render()
+    renderWindow.SetWindowName('Point Cloud')
     renderWindowInteractor.Start()
 
