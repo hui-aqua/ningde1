@@ -5,21 +5,21 @@ import src.visualization.saveVtk as sv
 import src.forces.springForce as f
 import src.visualization.showMatrix as sm
 
-geo.NN = 4#17
-geo.NT = 16#64
+geo.NN = 17
+geo.NT = 64
 
 
 sv.point, sv.line, sv.face = geo.gen_cage()
 sv.write_vtk('0')
-sm.plot(sv.line)
-pv.show_point(sv.point)
+# sm.plot(sv.line)
+# pv.show_point(sv.point)
 
 np.savetxt('point.out', sv.point)
 np.savetxt('lines.out', sv.line, delimiter=',', fmt='%1u')
 np.savetxt('surfs.out', sv.face, delimiter=',', fmt='%1u')
 
 # the submerged weight are attached to these points
-weight_point = [i*18*4+17 for i in range(16)]
+eight_point = [i*18*4+17 for i in range(16)]
 weight = 4.48  # [N]
 
 fixed_point = [i*18 for i in range(64)]
