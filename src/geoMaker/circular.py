@@ -18,8 +18,8 @@ NN = 8  # 17
 
 def __gen_points():
     point_one_cage = []
-    for i in range(0, NT):
-        for j in range(NN+1):
+    for j in range(NN+1):
+        for i in range(0, NT):
             point_one_cage.append(
                 [cr_top * np.cos(i * 2 * np.pi / float(NT)),
                  cr_top * np.sin(i * 2 * np.pi / float(NT)),
@@ -29,28 +29,27 @@ def __gen_points():
 
 def __gen_lines():
     line_element = []
-    for i in range(NN+1):
-        line_element.append([i, i+(NN+1)*(NT-1)])
-        for j in range(NT-1):
-            line_element.append([i+j*(NN+1), i+(j+1)*(1+NN)])
-
+    for j in range(NN+1):
+        for i in range(NT-1):
+            line_element.append([i+j*NT, 1+i+j*NT])
+        line_element.append([(j+1)*NT-1,j*NT])
+        
     # vertical con for netting
-    for i in range(NN):
-        for j in range(NT):
-            line_element.append([i+j*(NN+1), 1+i+j*(NN+1)])
+    for j in range(NN):
+        for i in range(NT):
+            line_element.append([i+j*NT, i+(1+j)*NT])
     return line_element
 
 
 def __gen_surfs():
     surf_element = []
-    for i in range(NN):
-        for j in range(NT):
-            if j < NT-1:
-                surf_element.append([i+j*(NN+1),     1+i+j*(NN+1),
-                                     i+(j+1)*(NN+1), 1+i+(j+1)*(NN+1)])
-            else:
-                surf_element.append([i+j*(NN+1), 1+i+j*(NN+1),
-                                     i, 1+i])
+    for j in range(NN):
+        for i in range(NT-1):
+            surf_element.append([i+j*NT, i+(1+j)*NT,
+                               1+i+j*NT, 1+i+(1+j)*NT])
+            
+        surf_element.append([1+i+j*NT, 1+i+(1+j)*NT,
+                                 j*NT, 1+1+i+j*NT])
     return surf_element
 
 # public function
