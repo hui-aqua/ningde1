@@ -2,7 +2,9 @@ import numpy as np
 
 
 
-def calc_spring_length(points_position, spring_indexs):
+def calc_spring_length(points_position:list, spring_indexs:list):
+    points_position=np.array(points_position)
+    spring_indexs=np.array(spring_indexs)
     return np.linalg.norm(points_position[spring_indexs[:, 0]]-points_position[spring_indexs[:, 1]], axis=1)
 
 

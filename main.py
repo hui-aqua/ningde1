@@ -27,6 +27,8 @@ fixed_point=[i*18 for i in range(64) ]
 gravity = -9.81  # unit [ m /s2]
 
 initial_length=f.calc_spring_length(sv.point,sv.line)
+point_mass=0.01*np.array([1 for i in range(len(sv.point))])
+
 spring_stiffness = 1e3  # unit [N/m] a.k.a -> K
 
 
