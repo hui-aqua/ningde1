@@ -13,6 +13,7 @@ cage_height = 1.5  # [m]
 NT = 32  # 64
 NN = 8  # 17
 
+number_of_horizontal_line=0
 # private function
 
 
@@ -28,12 +29,14 @@ def __gen_points():
 
 
 def __gen_lines():
+    global number_of_horizontal_line
     line_element = []
+    # for horizontal lines
     for j in range(NN+1):
         for i in range(NT-1):
             line_element.append([i+j*NT, 1+i+j*NT])
         line_element.append([(j+1)*NT-1,j*NT])
-        
+    number_of_horizontal_line=len(line_element)        
     # vertical con for netting
     for j in range(NN):
         for i in range(NT):
