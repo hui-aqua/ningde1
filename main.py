@@ -1,12 +1,13 @@
+from turtle import position
 import numpy as np
 import src.visualization.vtkVisualization as pv
 import src.geoMaker.circular as geo
 import src.visualization.saveVtk as sv
 import src.forces.springForce as f
 import src.visualization.showMatrix as sm
-import sys
-np.set_printoptions(threshold=sys.maxsize)
-
+import src.forces.quad as q
+# import sys
+# np.set_printoptions(threshold=sys.maxsize)
 geo.NN = 17
 geo.NT = 64
 
@@ -34,11 +35,18 @@ point_mass[weight_point] += weight/9.81
 
 position0 = np.array(sv.point)
 velocity0 = np.zeros_like(position0)
+
 gravity = np.array([0, 0, -9.81])  # unit [ m /s2]
+
 f.spring_index = sv.line
 f.number_of_point=len(sv.point)
 initial_length = f.calc_spring_length(sv.point)
-
+print(min(initial_length))
+print(max(initial_length))
+print(max(initial_length)*min(initial_length))
+q.quad_index=sv.face
+print(q.cal_area(position0))
+print(q.quad_unit_vector)
 run_time = 10  # unit [s]
 dt = 0.00005    # unit [s]
 
