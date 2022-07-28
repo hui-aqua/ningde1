@@ -5,7 +5,7 @@ import src.visualization.saveVtk as sv
 import src.element.line as l
 import src.visualization.showMatrix as sm
 import src.element.quad as q
-
+import src.waterWave.irregularWaves as w
 geo.NN = 17
 geo.NT = 64
 
@@ -49,6 +49,10 @@ run_time = 10  # unit [s]
 dt = 4e-5    # unit [s]
 uc=np.array([0.5,0,0])
 u=quad_element.map_velocity(uc)
+
+
+
+wave=w.summation()
 
 # must check velocity reduction factor
 print('velocity reduction factor is ', quad_element.get_wake_factor(position,u))
