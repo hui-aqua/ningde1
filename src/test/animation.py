@@ -79,14 +79,16 @@ def main():
     renderWindowInteractor.Initialize()
 
     # Sign up to receive TimerEvent
-    cb = vtkTimerCallback(200, actor, renderWindowInteractor)
+    cb = vtkTimerCallback(500, actor, renderWindowInteractor)
     renderWindowInteractor.AddObserver('TimerEvent', cb.execute)
+    
     cb.timerId = renderWindowInteractor.CreateRepeatingTimer(500)
 
     # start the interaction and timer
     renderWindow.Render()
+    
     renderWindowInteractor.Start()
-
-
+    
+    
 if __name__ == '__main__':
     main()

@@ -1,5 +1,6 @@
 import vtk
 
+
 def show_point(point_list:list):
     vtkPolyData = vtk.vtkPolyData()
     points = vtk.vtkPoints()
@@ -7,7 +8,8 @@ def show_point(point_list:list):
     
     vtkPolyData.SetPoints(points)
     vtkPolyData.SetVerts(vtkCells)
- 
+    vtkPolyData.GetPointData().SetActiveScalars('DepthArray')
+    
     for k in point_list:
         pointId = points.InsertNextPoint(k)
         vtkCells.InsertNextCell(1)
@@ -15,9 +17,10 @@ def show_point(point_list:list):
         vtkCells.Modified()
         points.Modified()
  
+    # Create a mapper and actor
     mapper = vtk.vtkPolyDataMapper()
-    mapper.SetInputData(vtkPolyData)
-
+    mapper.SetInputData(vtkPolyData.GetOutputPort())
+    mapper.SetInputConnection(sphereSource.GetOutputPort())
     mapper.SetScalarVisibility(1)
 
 
@@ -48,3 +51,10 @@ def show_point(point_list:list):
     renderWindow.SetWindowName('Point Cloud')
     renderWindowInteractor.Start()
 
+
+if __name__=='__main__':
+    
+    show_point()
+    
+    
+    

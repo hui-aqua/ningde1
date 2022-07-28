@@ -1,4 +1,3 @@
-from turtle import position
 import numpy as np
 import src.visualization.vtkVisualization as pv
 import src.geoMaker.circular as geo
@@ -47,8 +46,8 @@ print('vline length is ', vline_element.check_initial_lengths(position))
 quad_element=q.quads(sv.face,0.2)
 
 run_time = 10  # unit [s]
-dt = 5e-5    # unit [s]
-uc=np.array([0.3,0,0])
+dt = 4e-5    # unit [s]
+uc=np.array([0.5,0,0])
 u=quad_element.map_velocity(uc)
 
 # must check velocity reduction factor
@@ -77,7 +76,7 @@ for i in range(int(run_time/dt)):
     position += dt*velocity
     # print(position0)
     sv.point = position.tolist()
-    if i % 50 == 0:
+    if i % 1000 == 0:
         print('t = ','{:f}'.format(i*dt)) 
-        sv.write_vtk('ami/'+str(i))
+        sv.write_vtk('ami2/'+str(i))
  
