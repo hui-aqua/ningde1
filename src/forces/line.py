@@ -23,7 +23,7 @@ def calc_spring_length(points_position:list):
 
 def calc_spring_force(spring_deformation):
     """ calculate the force on spring.\n
-        If the spring is compressed, che force is negetive, otherwise, is positive
+        If the spring is compressed, che force is negative, otherwise, is positive
 
     Args:
         spring_deformation (vector): the deformation of a list of spring. Unit m.
@@ -39,7 +39,7 @@ def calc_spring_force(spring_deformation):
     
     return tension
 
-def map_sprint_force(force_on_spring):
+def map_force(force_on_spring):
     """calculate the acceleration of each points
 
     Args:
@@ -54,16 +54,16 @@ def map_sprint_force(force_on_spring):
     force1 = -sprint_unit_vector*force_on_spring.reshape(num_of_line, 1)
     force2 =  sprint_unit_vector*force_on_spring.reshape(num_of_line, 1)
 
-    acce=np.zeros((number_of_point,3))
+    force_on_point=np.zeros((number_of_point,3))
     __spring_index=np.array(spring_index)
     ## todo need to make the 1152 as variable, 
     # hint: number of horizontal lines and vertical lines need to be separate.
-    acce[__spring_index[:1152,0]]+=force1[:1152]
-    acce[__spring_index[:1152,1]]+=force2[:1152]
-    acce[__spring_index[1152:,0]]+=force1[1152:]
-    acce[__spring_index[1152:,1]]+=force2[1152:]
+    force_on_point[__spring_index[:1152,0]]+=force1[:1152]
+    force_on_point[__spring_index[:1152,1]]+=force2[:1152]
+    force_on_point[__spring_index[1152:,0]]+=force1[1152:]
+    force_on_point[__spring_index[1152:,1]]+=force2[1152:]
 
-    return acce
+    return force_on_point
 
 def __calculate_coe(uc:np.array):
     reynolds_number = row_water * dw0 * np.linalg.norm(uc) / dynamic_viscosity

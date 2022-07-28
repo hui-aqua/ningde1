@@ -13,10 +13,7 @@ cage_height = 1.5  # [m]
 NT = 32  # 64
 NN = 8  # 17
 
-number_of_horizontal_line=0
 # private function
-
-
 def __gen_points():
     point_one_cage = []
     for j in range(NN+1):
@@ -28,20 +25,20 @@ def __gen_points():
     return point_one_cage
 
 
-def __gen_lines():
-    global number_of_horizontal_line
-    line_element = []
+def __gen_lines():    
     # for horizontal lines
+    horizontal_lines = []
     for j in range(NN+1):
         for i in range(NT-1):
-            line_element.append([i+j*NT, 1+i+j*NT])
-        line_element.append([(j+1)*NT-1,j*NT])
-    number_of_horizontal_line=len(line_element)        
+            horizontal_lines.append([i+j*NT, 1+i+j*NT])
+        horizontal_lines.append([(j+1)*NT-1,j*NT])
+    
     # vertical con for netting
+    vertical_lines=[]
     for j in range(NN):
         for i in range(NT):
-            line_element.append([i+j*NT, i+(1+j)*NT])
-    return line_element
+            vertical_lines.append([i+j*NT, i+(1+j)*NT])
+    return horizontal_lines ,vertical_lines
 
 
 def __gen_surfs():
@@ -56,10 +53,11 @@ def __gen_surfs():
     return surf_element
 
 # public function
-
+def gen_lines():
+    hlines,vlines=__gen_lines()
+    return hlines,vlines
 
 def gen_cage():
     points = __gen_points()
-    lines = __gen_lines()
     surfs = __gen_surfs()
-    return points, lines, surfs
+    return points, surfs

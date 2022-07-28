@@ -3,7 +3,7 @@ import numpy as np
 import src.visualization.vtkVisualization as pv
 import src.geoMaker.circular as geo
 import src.visualization.saveVtk as sv
-import src.forces.springForce as f
+import src.forces.line as l
 import src.visualization.showMatrix as sm
 import src.forces.quad as q
 # import sys
@@ -12,11 +12,12 @@ geo.NN = 17
 geo.NT = 64
 
 
-sv.point, sv.line, sv.face = geo.gen_cage()
-print(geo.number_of_horizontal_line)
+sv.point, sv.face = geo.gen_cage()
+hline,vline=geo.gen_lines()
+sv.line=hline+vline
+
 sv.write_vtk('0')
 # pv.show_point(sv.point)
-
 
 np.savetxt('point.out', sv.point)
 np.savetxt('lines.out', sv.line, delimiter=',', fmt='%1u')
@@ -33,44 +34,46 @@ fixed_point = [i for i in range(64)]
 point_mass = np.ones((len(sv.point),1))*4.865/len(sv.point)
 point_mass[weight_point] += weight/9.81
 
-position0 = np.array(sv.point)
-velocity0 = np.zeros_like(position0)
+position = np.array(sv.point)
+velocity = np.zeros_like(position)
 
 gravity = np.array([0, 0, -9.81])  # unit [ m /s2]
 
-f.spring_index = sv.line
-f.number_of_point=len(sv.point)
-initial_length = f.calc_spring_length(sv.point)
-print(min(initial_length))
-print(max(initial_length))
-print(max(initial_length)*min(initial_length))
+l.spring_index = sv.line
+l.number_of_point=len(sv.point)
+initial_length = l.calc_spring_length(sv.point)
 q.quad_index=sv.face
-print(q.cal_area(position0))
-print(q.quad_unit_vector)
+q.number_of_point=len(sv.point)
+q.number_of_quad=len(sv.face)
+
+
 run_time = 10  # unit [s]
-dt = 0.00005    # unit [s]
+dt = 5e-5    # unit [s]
+uc=np.array([0.3,0,0])
+u=q.map_velocity(uc)
+
 
 # forward Euler (explicit)
-for i in range(int(run_time/dt)):
-     
-    
+for i in range(int(run_time/dt)):       
     # spring tension force
-    sprint_length = f.calc_spring_length(position0)
-    spring_force = f.calc_spring_force(sprint_length-initial_length)
-    velocity0 += dt * f.map_sprint_force(spring_force) / point_mass
+    sprint_length = l.calc_spring_length(position)
+    spring_force = l.calc_spring_force(sprint_length-initial_length)
+    velocity += dt * l.map_force(spring_force) / point_mass
+    
     # hydro force
-    filter=[i*64 for i in range(18)]
-    velocity0+=np.array([0.001,0,0])/point_mass
+    
+    hydro_force=q.cal_dynamic_force(position,u)
+    velocity += dt * q.map_force(hydro_force) / point_mass        
     
     # gravity force
-    velocity0 += dt*gravity
+    velocity += dt*gravity
 
-    velocity0[fixed_point] *= 0.0  # velocity restriction
+    velocity[fixed_point] *= 0.0  # velocity restriction
 
-    position0 += dt*velocity0
+    position += dt*velocity
     # print(position0)
-    sv.point = position0.tolist()
-    if i % 1 == 00:
+    sv.point = position.tolist()
+    if i % 100 == 0:
         print('t = ','{:f}'.format(i*dt)) 
         sv.write_vtk('ami/'+str(i))
  
