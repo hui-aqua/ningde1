@@ -1,8 +1,11 @@
 import numpy as np
+
+
+
 spring_stiffness = 1e6  # unit [N/m] a.k.a -> K
 sprint_unit_vector=0
 spring_index=[]
-number_of_point=0
+number_of_point=0  # ...len(np.unique(sprint_index))
 dwh=0
 dw0=0
 row_water=1000.0

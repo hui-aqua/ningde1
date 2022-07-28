@@ -6,8 +6,7 @@ import src.visualization.saveVtk as sv
 import src.forces.line as l
 import src.visualization.showMatrix as sm
 import src.forces.quad as q
-# import sys
-# np.set_printoptions(threshold=sys.maxsize)
+
 geo.NN = 17
 geo.NT = 64
 
