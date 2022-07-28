@@ -59,6 +59,7 @@ def __cal_wake_factor(point_position, cd, u):
     vector_cp = quad_center-net_center
     filter = np.diagonal(vector_cp@u.T) > 0
     reduction_factor = np.ones(number_of_quad)
+    
     r = 1-0.46*np.max(cd)
     reduction_factor[filter] *= r
     return reduction_factor.reshape(number_of_quad,-1)

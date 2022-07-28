@@ -3,9 +3,9 @@ import numpy as np
 import src.visualization.vtkVisualization as pv
 import src.geoMaker.circular as geo
 import src.visualization.saveVtk as sv
-import src.forces.line as l
+import src.element.line as l
 import src.visualization.showMatrix as sm
-import src.forces.quad as q
+import src.element.quad as q
 
 geo.NN = 17
 geo.NT = 64
@@ -38,41 +38,46 @@ velocity = np.zeros_like(position)
 
 gravity = np.array([0, 0, -9.81])  # unit [ m /s2]
 
-l.spring_index = sv.line
-l.number_of_point=len(sv.point)
-initial_length = l.calc_spring_length(sv.point)
-q.quad_index=sv.face
-q.number_of_point=len(sv.point)
-q.number_of_quad=len(sv.face)
+hline_element=l.lines(hline,1e6,0.03)
+vline_element=l.lines(vline,1e6,0.03)
+# must check initial length
+print('hline length is ', hline_element.check_initial_lengths(position))
+print('vline length is ', vline_element.check_initial_lengths(position))
 
+quad_element=q.quads(sv.face,0.2)
 
 run_time = 10  # unit [s]
 dt = 5e-5    # unit [s]
 uc=np.array([0.3,0,0])
-u=q.map_velocity(uc)
+u=quad_element.map_velocity(uc)
 
+# must check velocity reduction factor
+print('velocity reduction factor is ', quad_element.get_wake_factor(position,u))
 
 # forward Euler (explicit)
 for i in range(int(run_time/dt)):       
-    # spring tension force
-    sprint_length = l.calc_spring_length(position)
-    spring_force = l.calc_spring_force(sprint_length-initial_length)
-    velocity += dt * l.map_force(spring_force) / point_mass
+    # tension force on lines
+    spring_force = hline_element.calc_tension_force(position)
+    velocity += dt * hline_element.map_forces(spring_force) / point_mass
+    
+    spring_force = vline_element.calc_tension_force(position)
+    velocity += dt * vline_element.map_forces(spring_force) / point_mass
     
     # hydro force
     
-    hydro_force=q.cal_dynamic_force(position,u)
-    velocity += dt * q.map_force(hydro_force) / point_mass        
+    hydro_force=quad_element.cal_dynamic_force(position,u)
+    velocity += dt * quad_element.map_force(hydro_force) / point_mass        
     
     # gravity force
     velocity += dt*gravity
 
     velocity[fixed_point] *= 0.0  # velocity restriction
+    # velocity[fixed_point] *= np.array([1.0,1.0,0.0])  # fixed on xy plane
 
     position += dt*velocity
     # print(position0)
     sv.point = position.tolist()
-    if i % 100 == 0:
+    if i % 50 == 0:
         print('t = ','{:f}'.format(i*dt)) 
         sv.write_vtk('ami/'+str(i))
  
