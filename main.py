@@ -5,7 +5,7 @@ import src.visualization.saveVtk as sv
 import src.element.line as l
 import src.visualization.showMatrix as sm
 import src.element.quad as q
-import src.waterWave.irregularWaves as w
+import src.waterWave.regularWaves as ww
 geo.NN = 17
 geo.NT = 64
 
@@ -47,12 +47,11 @@ quad_element=q.quads(sv.face,0.2)
 
 run_time = 10  # unit [s]
 dt = 4e-5    # unit [s]
-uc=np.array([0.5,0,0])
+
+uc=np.array([0.25,0,0])
 u=quad_element.map_velocity(uc)
 
-
-
-wave=w.summation()
+wave=ww.Airywave(0.05,0.95,10)
 
 # must check velocity reduction factor
 print('velocity reduction factor is ', quad_element.get_wake_factor(position,u))
@@ -67,6 +66,8 @@ for i in range(int(run_time/dt)):
     velocity += dt * vline_element.map_forces(spring_force) / point_mass
     
     # hydro force
+    u=quad_element.map_velocity(uc)
+    uw=quad_element.map_velocity(wave.get_velocity_at_nodes(position,i*dt))
     
     hydro_force=quad_element.cal_dynamic_force(position,u)
     velocity += dt * quad_element.map_force(hydro_force) / point_mass        
@@ -80,7 +81,7 @@ for i in range(int(run_time/dt)):
     position += dt*velocity
     # print(position0)
     sv.point = position.tolist()
-    if i % 1000 == 0:
+    if i % 500 == 0:
         print('t = ','{:f}'.format(i*dt)) 
         sv.write_vtk('ami2/'+str(i))
  
