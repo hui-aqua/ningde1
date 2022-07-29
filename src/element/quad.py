@@ -66,14 +66,10 @@ class quads:
         # dot product in numpy do not have axis
 
         quad_area = self.__calc_area(point_position)
-        # print(abs(np.diagonal(quad_unit_vector@uc.T)) .shape)
-        # print(uc_mag.shape)
         theta = np.arccos(abs(np.diagonal(self.vector_Ne@uc.T)).reshape(self.number_of_quad, -1) / uc_mag)
-
         cd, cl = self.__calc_force_coe(theta)
 
         drag_e = uc/uc_mag
-    
         lift_e = np.cross(np.cross(drag_e, self.vector_Ne, axis=1),drag_e,axis=1)
 
         fd = 0.5*row_water*quad_area*cd*pow(uc_mag*self.Ur, 2)*drag_e
@@ -93,9 +89,13 @@ class quads:
     def map_velocity(self,u):
         if len(u) == 3:
             uc = np.ones((self.number_of_quad, 3))*u
-        elif len(u) == len(self.number_of_quad):
+        elif len(u) == self.number_of_quad:
             uc = u
-        else:
+        elif len(u) == self.number_of_point:
+            uc=np.zeros((self.number_of_quad,3))
+            for i in range(4):
+                uc+=0.25*u[self.np_index[:,i]]
+        else:    
             print("The given U does match element", u)
         return uc
  
