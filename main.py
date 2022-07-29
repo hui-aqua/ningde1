@@ -68,7 +68,7 @@ for i in range(int(run_time/dt)):
     # hydro force
     u=quad_element.map_velocity(uc)
     uw=quad_element.map_velocity(wave.get_velocity_at_nodes(position,i*dt))
-    
+    u+=uw
     hydro_force=quad_element.cal_dynamic_force(position,u)
     velocity += dt * quad_element.map_force(hydro_force) / point_mass        
     
