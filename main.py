@@ -15,7 +15,7 @@ hline,vline=geo.gen_lines()
 sv.line=hline+vline
 
 sv.write_vtk('0')
-# pv.show_point(sv.point)
+pv.show_point(sv.point)
 
 np.savetxt('point.out', sv.point)
 np.savetxt('lines.out', sv.line, delimiter=',', fmt='%1u')
