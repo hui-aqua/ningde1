@@ -2,7 +2,6 @@
 Author: Dr. Hui CHeng
 Any questions about this code,
 please email: hui.cheng@uis.no \n
-
 """
 
 import numpy as np

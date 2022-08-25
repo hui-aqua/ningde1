@@ -53,8 +53,8 @@ def show_point(point_list:list):
 
 
 if __name__=='__main__':
-    
-    show_point()
+    kp=[[0,0,0],[5,2,6],[0,1,0],[6.5,8,6]]
+    show_point(kp)
     
     
     

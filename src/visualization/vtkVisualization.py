@@ -48,3 +48,9 @@ def show_point(point_list:list):
     renderWindow.SetWindowName('Point Cloud')
     renderWindowInteractor.Start()
 
+if __name__=='__main__':
+    kp=[[0,0,0],[5,2,6],[0,1,0],[6.5,8,6]]
+    show_point(kp)
+    
+    
+    
