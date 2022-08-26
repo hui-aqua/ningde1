@@ -55,7 +55,7 @@ wave=ww.Airywave(0.05,0.95,10)
 
 # must check velocity reduction factor
 print('velocity reduction factor is ', quad_element.get_wake_factor(position,u))
-
+   
 # forward Euler (explicit)
 for i in range(int(run_time/dt)):       
     # tension force on lines
