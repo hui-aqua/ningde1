@@ -11,7 +11,7 @@ x0=1.2
 u0=0
 
 run_time = 40  # unit [s]
-dt = 2e-2    # unit [s]
+dt = 5e-2    # unit [s]
 
    
 # forward Euler (explicit)
