@@ -1,0 +1,15 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\src",
+    "\\src\\case",
+    "\\src\\element",
+    "\\src\\geoMaker",
+    "\\src\\solver",
+    "\\src\\test",
+    "\\src\\visualization",
+    "\\testCase"
+  ],
+  "SelectedNode": "\\main.py",
+  "PreviewInSolutionExplorer": false
+}
