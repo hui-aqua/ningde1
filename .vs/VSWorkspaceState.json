@@ -1,7 +1,6 @@
 {
   "ExpandedNodes": [
     "",
-    "\\src",
     "\\src\\case",
     "\\src\\element",
     "\\src\\geoMaker",
@@ -10,6 +9,6 @@
     "\\src\\visualization",
     "\\testCase"
   ],
-  "SelectedNode": "\\main.py",
+  "SelectedNode": "\\testCase\\taichi_case.py",
   "PreviewInSolutionExplorer": false
 }
