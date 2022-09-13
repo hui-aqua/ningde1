@@ -10,6 +10,11 @@
       "taskLabel": "task-2022DEMAT_wakeEffect",
       "appliesTo": "/",
       "type": "launch"
+    },
+    {
+      "taskLabel": "task-main",
+      "appliesTo": "main.py",
+      "type": "launch"
     }
   ]
 }
