@@ -1,5 +1,5 @@
 import numpy as np
-import src.visualization.vtkVisualization as pv
+import pyvista as pv
 import src.geoMaker.circular as geo
 import src.visualization.saveVtk as sv
 import src.element.line as l
@@ -14,12 +14,18 @@ sv.point, sv.face = geo.gen_cage()
 hline,vline=geo.gen_lines()
 sv.line=hline+vline
 
-sv.write_vtk('0')
-pv.show_point(sv.point)
-
 np.savetxt('point.out', sv.point)
 np.savetxt('lines.out', sv.line, delimiter=',', fmt='%1u')
 np.savetxt('surfs.out', sv.face, delimiter=',', fmt='%1u')
+
+## visualization using pyvista
+p = pv.Plotter()
+edges=[[[2]+item] for item in sv.line]
+mesh=pv.PolyData(sv.point,edges)
+p.add_mesh(mesh,color='tan',style='wireframe')
+p.add_axes_at_origin()
+p.show()
+mesh.save("mesh.vtk")
 
 # the submerged weight are attached to these points
 weight_point = [1088+4*i for i in range(16)]
