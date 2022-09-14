@@ -1,6 +1,7 @@
 *.out
 *.vtp
 *.vtu
+/testCase
 ami
 # Byte-compiled / optimized / DLL files
 /__pycache__/
