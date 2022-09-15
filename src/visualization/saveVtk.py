@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from vtk.vtkIOXML import vtkXMLDataSetWriter
 import vtk
 
 
@@ -91,7 +90,7 @@ def write_vtk(file_name:str,**content):
         point, line, face: python list
         
     """
-    writer = vtkXMLDataSetWriter()
+    writer = vtk.vtkXMLDataSetWriter()
     #print(content)
     
     try:
@@ -117,6 +116,16 @@ def write_vtk(file_name:str,**content):
         writer.Write()    
     except:
         print('No face data is given')
+        
+def write_line_vtk(file_name:str,**content):
+    writer = vtk.vtkXMLDataSetWriter()
+    try:
+        u2=__MakeMultiLine(content['point'],content['line'])
+        writer.SetInputData(u2)
+        writer.SetFileName(file_name+'.line.vtu')
+        writer.Write()
+    except:
+        print('No line data is given')
         
         
 if __name__ == '__main__':

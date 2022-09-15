@@ -1,12 +1,12 @@
 import numpy as np
 
-
 # node no main body
 nodes = [[-58.5, 26.5,   0.0],
          [-28.5, 26.5,   0.0],
          [0,     26.5,   0.0],
          [28.5,  26.5,   0.0],
          [58.5,  26.5,   0.0],
+         
          [-58.5,  0.0,   0.0],
          [-28.5,  0.0,   0.0],
          [0,      0.0,   0.0],
@@ -50,12 +50,12 @@ anchor_point = [
 attached_point=[10,10,14,14,0,0,4,4]
 
 # 100 segments per mooring line.
+num_seg=10
 mooring_point=[]
 for i in range(8):
-    ml=np.linspace(anchor_point[i],nodes[attached_point[i]],100)
+    ml=np.linspace(anchor_point[i],nodes[attached_point[i]],num_seg,endpoint=False)
     mooring_point+=ml.tolist()
 
-print(len(mooring_point))
 
 # distance:
 # mnarray=np.array(mooring_nodes)
@@ -71,10 +71,10 @@ print(len(mooring_point))
 # 296.635183186351
 # 296.63518318635096
 
-
-
 nodes += mooring_point
 
+## lines
+# frame
 l1 = [[0, 6], [1, 6], [2, 6], [10, 6], [11, 6], [12, 6],
       [2, 8], [3, 8], [4, 8], [12, 8], [13, 8], [14, 8],
       [2, 7], [7, 12],
@@ -92,4 +92,53 @@ for i in range(15):
 
 l1 += [[15, 1], [17, 1], [17, 3], [19, 3],
        [25, 11], [27, 11], [27, 13], [29, 13]]
-l5 = [7, 30]
+l5 = [[7, 30]]
+
+# mooring lines
+num_body_point=31
+lm=[]
+for i in range(8):
+    for j in range(num_seg-1):
+        lm.append([i*num_seg+num_body_point+j,i*num_seg+num_body_point+j+1])
+    lm.append([i*num_seg+num_body_point+j+1,attached_point[i]])
+    
+l_all=l1+l2+l3+l5+lm
+
+## face
+netFace=[[0,1,15,16],
+         [1,2,16,17],
+         [2,3,17,18],
+         [3,4,18,19],
+         [4,9,19,24],
+         [9,14,24,29],
+         [14,13,29,28],
+         [13,12,28,27],
+         [12,11,27,26],
+         [11,10,26,25],
+         [10,5,25,20],
+         [5,0,20,15],
+         [0,1,5,6],
+         [5,6,10,11],
+         [1,2,6,7],
+         [6,7,11,12],
+         [2,3,7,8],
+         [7,8,12,13],
+         [3,4,8,9],
+         [8,9,13,14],
+         [25,26,20,21],
+         [20,21,15,16],
+         [26,27,21,22],
+         [21,22,16,17],
+         [27,28,22,23],
+         [22,23,17,18],
+         [28,29,23,24],
+         [23,24,18,19]]
+
+if __name__ == '__main__':
+	from ..visualization import saveVtk as sv
+	sv.write_vtk("initial",point=nodes,face=netFace)
+	sv.write_line_vtk("initial_l1",point=nodes,line=l1)
+	sv.write_line_vtk("initial_l2",point=nodes,line=l2)
+	sv.write_line_vtk("initial_l3",point=nodes,line=l3)
+	sv.write_line_vtk("initial_l5",point=nodes,line=l5)
+	sv.write_line_vtk("initial_lm",point=nodes,line=lm)

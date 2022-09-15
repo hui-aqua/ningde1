@@ -6,5 +6,7 @@ import src.visualization.saveVtk as sv
 # for circular cage
 # import src.case.circularCage as case
 # case.main()
-
-sv.write_vtk('ningdeT',point=geo.nodes,line=geo.l1+geo.l2+geo.l3+[geo.l5])
+nodes=geo.nodes
+line=geo.l_all
+face=geo.netFace
+sv.write_vtk('initial',point=nodes,line=line,face=face)
