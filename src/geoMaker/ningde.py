@@ -50,7 +50,7 @@ anchor_point = [
 attached_point=[10,10,14,14,0,0,4,4]
 
 # 100 segments per mooring line.
-num_seg=10
+num_seg=50
 mooring_point=[]
 for i in range(8):
     ml=np.linspace(anchor_point[i],nodes[attached_point[i]],num_seg,endpoint=False)
@@ -135,10 +135,11 @@ netFace=[[0,1,15,16],
          [23,24,18,19]]
 
 if __name__ == '__main__':
-	from ..visualization import saveVtk as sv
-	sv.write_vtk("initial",point=nodes,face=netFace)
-	sv.write_line_vtk("initial_l1",point=nodes,line=l1)
-	sv.write_line_vtk("initial_l2",point=nodes,line=l2)
-	sv.write_line_vtk("initial_l3",point=nodes,line=l3)
-	sv.write_line_vtk("initial_l5",point=nodes,line=l5)
-	sv.write_line_vtk("initial_lm",point=nodes,line=lm)
+    pass
+	# from ..visualization import saveVtk as sv
+	# sv.write_vtk("initial",point=nodes,face=netFace)
+	# sv.write_line_vtk("initial_l1",point=nodes,line=l1)
+	# sv.write_line_vtk("initial_l2",point=nodes,line=l2)
+	# sv.write_line_vtk("initial_l3",point=nodes,line=l3)
+	# sv.write_line_vtk("initial_l5",point=nodes,line=l5)
+	# sv.write_line_vtk("initial_lm",point=nodes,line=lm)

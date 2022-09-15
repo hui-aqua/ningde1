@@ -50,8 +50,8 @@ def main():
     hline_element=l.lines(hline,1e6,0.03)
     vline_element=l.lines(vline,1e6,0.03)
     # must check initial length
-    print('hline length is ', hline_element.check_initial_lengths(position))
-    print('vline length is ', vline_element.check_initial_lengths(position))
+    print('hline length is ', hline_element.assign_length(position))
+    print('vline length is ', vline_element.assign_length(position))
 
     quad_element=q.quads(sv.face,0.2)
 
@@ -70,10 +70,10 @@ def main():
     for i in range(int(run_time/dt)):       
         # tension force on lines
         spring_force = hline_element.calc_tension_force(position)
-        velocity += dt * hline_element.map_forces(spring_force) / point_mass
+        velocity += dt * hline_element.map_tension(spring_force) / point_mass
 
         spring_force = vline_element.calc_tension_force(position)
-        velocity += dt * vline_element.map_forces(spring_force) / point_mass
+        velocity += dt * vline_element.map_tension(spring_force) / point_mass
 
         # hydro force
         u=quad_element.map_velocity(uc)
