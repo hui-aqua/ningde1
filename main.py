@@ -7,4 +7,4 @@ import src.visualization.saveVtk as sv
 # import src.case.circularCage as case
 # case.main()
 
-
+sv.write_vtk('ningdeT',point=geo.nodes,line=geo.l1+geo.l2+geo.l3+[geo.l5])

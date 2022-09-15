@@ -1,7 +1,9 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\src",
+    "\\src\\case"
   ],
-  "SelectedNode": "\\main.py",
+  "SelectedNode": "\\src\\case\\ningde.py",
   "PreviewInSolutionExplorer": false
 }

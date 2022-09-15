@@ -92,6 +92,7 @@ def write_vtk(file_name:str,**content):
         
     """
     writer = vtkXMLDataSetWriter()
+    #print(content)
     
     try:
         u1=__MakeMultiPoint(content['point'])
