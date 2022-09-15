@@ -12,19 +12,28 @@ class lines:
         self.number_of_point=len(np.unique(np.array(self.index)))
         self.number_of_line=len(index)
         self.initial_line_length=0
-        
-        
-    
+        self.dw0=dw0
+    # private function 
+
     def __calc_lengths(self,point_position:np.array):
         line_vector=point_position[self.np_index[:, 0]]-point_position[self.np_index[:, 1]]
         line_length=np.linalg.norm(line_vector, axis=1)
         self.unit_vector=line_vector/line_length.reshape(self.number_of_line,-1)
         self.line_length=line_length
         return line_length
-
-    def check_initial_lengths(self,point_position:np.array):
-        self.initial_line_length = self.__calc_lengths(point_position)
-        return max(self.initial_line_length),min(self.initial_line_length),np.mean(self.initial_line_length)
+    
+    
+    # public function
+    def assign_length(self,input_value):
+        if type(input_value)==type(np.zeros(3)):
+            self.initial_line_length = self.__calc_lengths(input_value)
+        elif len(input_value)== self.number_of_line:
+            self.initial_line_length = input_value
+        elif type(input_value) ==type(4.2):
+            self.initial_line_length = self.number_of_line*[input_value]
+        
+        return np.mean(self.initial_line_length)
+        
     
     def calc_tension_force(self,point_position):
         line_length=self.__calc_lengths(point_position)
@@ -34,17 +43,24 @@ class lines:
         tension=deformations*self.k
         return tension
     
-    def map_forces(self,forces):
+    def map_tension(self,forces):
         # spring forces on the points of first column of spring index
         force1 = -self.unit_vector *forces.reshape(self.number_of_line, -1)
         force2 =  self.unit_vector *forces.reshape(self.number_of_line, -1)
-
         force_on_point=np.zeros((self.number_of_point,3))
         force_on_point[self.np_index[:,0]]+=force1
         force_on_point[self.np_index[:,1]]+=force2
-
         return force_on_point
+    def calculate_extenal_force(self,node_position,u):
+        
     
+    
+    
+    def map_hydrodynamic_force(self,forces):
+        force_on_point=np.zeros((self.number_of_point,3))
+        force_on_point[self.np_index[:,0]]+=forces/2.0
+        force_on_point[self.np_index[:,1]]+=forces/2.0
+
     
     def __calculate_coe(self,uc:np.array):
         reynolds_number = row_water * self.dw0 * np.linalg.norm(uc) / dynamic_viscosity
@@ -72,6 +88,30 @@ class lines:
             exit()
         return drag_normal, drag_tangent
 
+    def __calculate_buoyancy_force(self,node_position, elevation):
+        
+        num_line = len(self.line_elements)
+        # force on line element, initial as zeros
+        force_on_element = np.zeros((num_line, 3),dtype=float)
+        for index, element in enumerate(self.line_elements):
+            p1 = node_position[int(element[0])]
+            p2 = node_position[int(element[1])]
+
+            list_z = []
+            for each in element:
+                list_z.append(float(elevation[each] - node_position[each][2]))
+            ratio = self.cal_aw_ratio(list_z)
+            row = row_water*ratio+row_air*(1-ratio)
+
+            element_length = np.linalg.norm(p1-p2)
+            element_volume = 0.25*pi*pow(self.dwh, 2)*element_length           
+            force_on_element[index] = [0.0, 0.0, element_volume*gravity*row]
+
+        self.hydro_static_forces = np.array(force_on_element)
+        return np.array(force_on_element)
+    
+    
+    
     def __calculate_dynamic_force(self,uc:np.array):
         """calculate the hydrodynamic forces on line element based on Morison model
 
