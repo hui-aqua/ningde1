@@ -127,6 +127,30 @@ def write_line_vtk(file_name:str,**content):
     except:
         print('No line data is given')
         
+
+
+def write_wave_vtk(file_name:str,elevations:np.array,width:float):
+    """
+    write the water surface as vtk file for paraview.
+    elevations: a np.array data, nx3 dimension.n is the number of the points
+    width: to show the width of the water surface. The water face is extruded based on the elevations. 
+    e.g., if the elevations are the points along x-axis, then the water sufrace width is along y-axis.
+    # default 
+    """
+    
+    elevations_two=np.vstack((elevations-np.array([0,width/2,0]),elevations+np.array([0,width/2,0])))
+    surface_list=[]
+    num_elevation=len(elevations)
+    for i in range(num_elevation-1):
+        surface_list.append([i,i+1,i+num_elevation,i+1+num_elevation])
+
+    writer = vtk.vtkXMLDataSetWriter()
+    ug=__MakeMultiFace(elevations_two.tolist(),surface_list)
+    writer.SetInputData(ug)
+    writer.SetFileName(file_name+'.face.vtu')
+    writer.Write()
+
+
         
 if __name__ == '__main__':
     write_vtk('test',point=point,line=line,face=face)    

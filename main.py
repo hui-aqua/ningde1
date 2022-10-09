@@ -46,24 +46,23 @@ dt = 2e-2    # unit [s]
 
 # forward Euler (explicit)
 for i in range(int(run_time/dt)):       
-       
+    
+    
+
+
+
     # gravity force
     dxyz += dt*gravity
     
     # boundary condition
     dxyz[fixed_point] *= 0.0  # velocity restriction
     dxyz[xyz[:,2]<-22.0]*=np.array([1.0,1.0,0.0]) 
+
     # velocity[fixed_point] *= np.array([1.0,1.0,0.0])  # fixed on xy plane
     xyz += dt*dxyz
-    # print(dxyz)
-    # print(position0)
+    
+    
     nodes = xyz.tolist()
-    # print(nodes)
     if i % 5 == 0:
         # sv.write_vtk('initial',point=nodes,line=line,face=face)
-        sv.write_vtk("ami2/"+"fa"+str(i),point=nodes,face=face)
-        sv.write_line_vtk("ami2/"+"l1"+str(i),point=nodes,line=geo.l1)
-        sv.write_line_vtk("ami2/"+"l2"+str(i),point=nodes,line=geo.l2)
-        sv.write_line_vtk("ami2/"+"l3"+str(i),point=nodes,line=geo.l3)
-        sv.write_line_vtk("ami2/"+"l5"+str(i),point=nodes,line=geo.l5)
-        sv.write_line_vtk("ami2/"+"lm"+str(i),point=nodes,line=geo.lm)
+        sv.write_vtk("ami2/"+"resu"+str(i),point=nodes,face=face,line=geo.l_all)
