@@ -40,8 +40,9 @@ dxyz=np.zeros_like(xyz)
 gravity=np.array([0,0,-9.81])
 
 #wave=rw.Airywave(wave_height=1.0,wave_period=10.0,water_depth=22,direction=0,phase=0)
-spe=ws.jonswap_spectra(np.linspace(0.02,10,100),)
-iwave=iw.summation()
+spe=ws.jonswap_spectra(np.linspace(0.02,10,100),hs=3.43,tp=6.7)
+kk=np.hstack((np.linspace(0.02,10,100).reshape(100,1),spe.reshape(100,1)))
+iwave=iw.summation(kk,22,0)
 
 wave_prob=np.array([[1,0,0]]*800)*np.linspace(-200,200,800).reshape(800,1)
 run_time = 10  # unit [s]
@@ -49,7 +50,7 @@ dt = 2e-2    # unit [s]
 
 # forward Euler (explicit)
 for i in range(int(run_time/dt)):       
-    
+    dxyz=np.zeros_like(xyz)
     
 
 
@@ -67,7 +68,7 @@ for i in range(int(run_time/dt)):
     
     nodes = xyz.tolist()
     if i % 5 == 0:
-        elevation=wave.calc_elevation(wave_prob,dt*i)
+        elevation=iwave.get_elevations_at_one_time(wave_prob,dt*i)
         elevation=wave_prob+np.array([[0,0,1]]*800)*elevation.reshape(800,1)
         sv.write_wave_vtk("ami2/"+"resu"+str(i),elevation,100)
         # sv.write_vtk('initial',point=nodes,line=line,face=face)

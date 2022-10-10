@@ -1,5 +1,5 @@
 import numpy as np
-from . import RegularWaves as wave
+from . import regularWaves as wave
 
 # import Airywave as wave
 # import wave_spectrum as wsp
@@ -55,6 +55,21 @@ class summation:
         for index, each_wave in enumerate(self.list_of_waves):
             wave_elevations[index] = each_wave.get_elevations_at_one_node(position, time_list)
         return np.sum(wave_elevations, axis=0)
+    
+    def get_elevations_at_one_time(self, position_list, time:float):
+        """
+        Public function.\n
+        :param position: [np.array].shape=(3,) | Unit: [m]. The position of one node
+        :param time_list: [np.array].shape=(n,1) | Uint: [s]. The time sequence for getting the elevations \n
+        :return: Get a list of elevations at one position with a time sequence \n
+        """
+        wave_elevations = np.zeros((len(self.list_of_waves), len(position_list)))
+        for index, each_wave in enumerate(self.list_of_waves):
+            wave_elevations[index] = each_wave.get_elevation_at_nodes(position_list, time)
+        return np.sum(wave_elevations, axis=0)
+    
+    
+    
     ## velocity
     def get_velocity_at_one_node(self, position, time_list):
         """
