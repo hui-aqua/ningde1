@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import vtk
-
+import numpy as np
 
 point=[[0,0,0],
    [1,1,1],
@@ -147,7 +147,7 @@ def write_wave_vtk(file_name:str,elevations:np.array,width:float):
     writer = vtk.vtkXMLDataSetWriter()
     ug=__MakeMultiFace(elevations_two.tolist(),surface_list)
     writer.SetInputData(ug)
-    writer.SetFileName(file_name+'.face.vtu')
+    writer.SetFileName(file_name+'.waveface.vtu')
     writer.Write()
 
 

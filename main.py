@@ -4,10 +4,9 @@ import src.geoMaker.ningde as geo
 import src.visualization.saveVtk as sv
 import src.element.line as l
 import src.element.quad as q
-
-# for circular cage
-# import src.case.circularCage as case
-# case.main()
+import src.waterWave.regularWaves as rw
+import src.waterWave.irregularWaves as iw
+import src.waterWave.waveSpectrum as ws
 nodes=geo.nodes
 line=geo.l_all
 face=geo.netFace
@@ -40,7 +39,11 @@ xyz=np.array(nodes)
 dxyz=np.zeros_like(xyz)
 gravity=np.array([0,0,-9.81])
 
+#wave=rw.Airywave(wave_height=1.0,wave_period=10.0,water_depth=22,direction=0,phase=0)
+spe=ws.jonswap_spectra(np.linspace(0.02,10,100),)
+iwave=iw.summation()
 
+wave_prob=np.array([[1,0,0]]*800)*np.linspace(-200,200,800).reshape(800,1)
 run_time = 10  # unit [s]
 dt = 2e-2    # unit [s]
 
@@ -59,10 +62,14 @@ for i in range(int(run_time/dt)):
     dxyz[xyz[:,2]<-22.0]*=np.array([1.0,1.0,0.0]) 
 
     # velocity[fixed_point] *= np.array([1.0,1.0,0.0])  # fixed on xy plane
-    xyz += dt*dxyz
+    #xyz += dt*dxyz
     
     
     nodes = xyz.tolist()
     if i % 5 == 0:
+        elevation=wave.calc_elevation(wave_prob,dt*i)
+        elevation=wave_prob+np.array([[0,0,1]]*800)*elevation.reshape(800,1)
+        sv.write_wave_vtk("ami2/"+"resu"+str(i),elevation,100)
         # sv.write_vtk('initial',point=nodes,line=line,face=face)
         sv.write_vtk("ami2/"+"resu"+str(i),point=nodes,face=face,line=geo.l_all)
+
