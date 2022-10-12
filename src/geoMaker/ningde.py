@@ -49,7 +49,7 @@ anchor_point = [
 
 attached_point=[10,10,14,14,0,0,4,4]
 
-# 100 segments per mooring line.
+# 50 segments per mooring line.
 num_seg=50
 mooring_point=[]
 for i in range(8):

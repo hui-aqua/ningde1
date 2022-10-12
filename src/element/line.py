@@ -26,9 +26,21 @@ class lines:
     
     # public function
     def assign_length(self,input_value):
+        """This is a initial function to assign a length to a group line element
+
+        Args:
+            input_value (varian): the input value can be:\n 
+            (1) one single value, then the length of line element will be the same as input value.\n
+            (2) a python list of length, to assign a variant length to the line group.\n
+            (3) a n*3 numpy array of all the nodes position, then the length can bu calculated based on the array.\n
+            
+
+        Returns:
+            float: get the mean length of this line group.
+        """
         if type(input_value)==type(np.zeros(3)):
             self.initial_line_length = self.__calc_lengths(input_value)
-        elif len(input_value)== self.number_of_line:
+        elif type(input_value)==type([1]) and len(input_value)== self.number_of_line:
             self.initial_line_length = input_value
         elif type(input_value) ==type(4.2):
             self.initial_line_length = self.number_of_line*[input_value]
@@ -44,14 +56,32 @@ class lines:
         tension=deformations*self.k
         return tension
     
-    def map_tension(self,forces):
+    def calc_compression_force(self,point_position):
+        line_length=self.__calc_lengths(point_position)
+        deformations=line_length - self.initial_line_length 
+        # no compression force
+        deformations[deformations>0]*=0.0
+        tension=deformations*self.k
+        return tension
+    
+    
+    def map_tension(self,forces:np.array,num_point:int):
         # spring forces on the points of first column of spring index
+        force1 = -self.unit_vector *forces.reshape(self.number_of_line, -1)
+        force2 =  self.unit_vector *forces.reshape(self.number_of_line, -1)
+        force_on_point=np.zeros((num_point,3))
+        force_on_point[self.np_index[:,0]]+=force1
+        force_on_point[self.np_index[:,1]]+=force2
+        return force_on_point
+    
+    def pbd_position(self,forces,mass):
         force1 = -self.unit_vector *forces.reshape(self.number_of_line, -1)
         force2 =  self.unit_vector *forces.reshape(self.number_of_line, -1)
         force_on_point=np.zeros((self.number_of_point,3))
         force_on_point[self.np_index[:,0]]+=force1
         force_on_point[self.np_index[:,1]]+=force2
         return force_on_point
+        
     
     
     def calculate_extenal_force(self,node_position,u): 

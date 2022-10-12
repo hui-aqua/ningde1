@@ -17,7 +17,7 @@ def main():
     sv.point, sv.face = geo.gen_cage()
     hline,vline=geo.gen_lines()
     sv.line=hline+vline
-
+    num_point=len(sv.point)
     np.savetxt('point.out', sv.point)
     np.savetxt('lines.out', sv.line, delimiter=',', fmt='%1u')
     np.savetxt('surfs.out', sv.face, delimiter=',', fmt='%1u')
@@ -70,10 +70,10 @@ def main():
     for i in range(int(run_time/dt)):       
         # tension force on lines
         spring_force = hline_element.calc_tension_force(position)
-        velocity += dt * hline_element.map_tension(spring_force) / point_mass
+        velocity += dt * hline_element.map_tension(spring_force,num_point) / point_mass
 
         spring_force = vline_element.calc_tension_force(position)
-        velocity += dt * vline_element.map_tension(spring_force) / point_mass
+        velocity += dt * vline_element.map_tension(spring_force,num_point) / point_mass
 
         # hydro force
         u=quad_element.map_velocity(uc)
@@ -94,4 +94,4 @@ def main():
         if i % 500 == 0:
             print('t = ','{:f}'.format(i*dt)) 
             sv.write_vtk('ami2/'+str(i),point=sv.point,line=sv.line,face=sv.face)
-    
+   
