@@ -74,13 +74,20 @@ class lines:
         force_on_point[self.np_index[:,1]]+=force2
         return force_on_point
     
-    def pbd_position(self,forces,mass):
-        force1 = -self.unit_vector *forces.reshape(self.number_of_line, -1)
-        force2 =  self.unit_vector *forces.reshape(self.number_of_line, -1)
-        force_on_point=np.zeros((self.number_of_point,3))
-        force_on_point[self.np_index[:,0]]+=force1
-        force_on_point[self.np_index[:,1]]+=force2
-        return force_on_point
+    def pbd_edge_constraint(self,point_position:np.array,point_mass:np.array,dt:float):
+        line_length=self.__calc_lengths(point_position)
+        alpha=1.0/self.k/ dt /dt
+        w=1.0/point_mass
+        #print(w.shape)
+        #print(w.shape)
+        w1_w2=w[self.np_index[:,0]]+w[self.np_index[:,1]]
+        C=line_length-self.initial_line_length   
+        s=C.reshape(len(C),1)/(w1_w2+alpha)
+
+        position_correction=np.zeros_like(point_position)
+        position_correction[self.np_index[:,0]]+= self.unit_vector*s*w[self.np_index[:,0]]
+        position_correction[self.np_index[:,1]]+=-self.unit_vector*s*w[self.np_index[:,1]]
+        return position_correction
         
     
     
