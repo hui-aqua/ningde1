@@ -2,8 +2,9 @@
   "ExpandedNodes": [
     "",
     "\\src",
-    "\\src\\case"
+    "\\src\\case",
+    "\\src\\geoMaker"
   ],
-  "SelectedNode": "\\src\\case\\ningde.py",
+  "SelectedNode": "\\main.py",
   "PreviewInSolutionExplorer": false
 }

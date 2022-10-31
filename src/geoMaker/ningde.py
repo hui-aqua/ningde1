@@ -6,7 +6,7 @@ nodes = [[-58.5, 26.5,   0.0],
          [0,     26.5,   0.0],
          [28.5,  26.5,   0.0],
          [58.5,  26.5,   0.0],
-         
+
          [-58.5,  0.0,   0.0],
          [-28.5,  0.0,   0.0],
          [0,      0.0,   0.0],
@@ -38,16 +38,16 @@ nodes = [[-58.5, 26.5,   0.0],
 # node on mooring lines
 
 anchor_point = [
-                 [-276.405,	-226.173	, -22], # 10
-                 [-258.173,	-244.405	, -22], # 10
-                 [276.405,	-226.173	, -22], # 14
-                 [258.173,	-244.405	, -22], # 14
-                 [-276.6,	226.352		, -22], # 0
-                 [-258.352,	244.6		, -22], # 0
-                 [276.6,	226.352		, -22], # 4
-                 [258.352,	244.6		, -22]] # 4
+                 [-276.405,	-226.173	, -22], # 10--8
+                 [-258.173,	-244.405	, -22], # 10--7
+                 [276.405,	-226.173	, -22], # 14--6
+                 [258.173,	-244.405	, -22], # 14--5
+                 [-276.6,	226.352		, -22], # 0--1
+                 [-258.352,	244.6		, -22], # 0--2
+                 [276.6,	226.352		, -22], # 4--3
+                 [258.352,	244.6		, -22]] # 4--4
 
-attached_point=[10,10,14,14,0,0,4,4]
+attached_point=[10,10,14,14,0,0,4,4]  # Index of node for the main body
 
 # 50 segments per mooring line.
 num_seg=50
@@ -55,6 +55,20 @@ mooring_point=[]
 for i in range(8):
     ml=np.linspace(anchor_point[i],nodes[attached_point[i]],num_seg,endpoint=False)
     mooring_point+=ml.tolist()
+
+# New_mooring line
+# 50 segments per mooring line.
+num_seg=50
+new_mooring_point=[]
+for i in range(8):
+    ml=np.linspace(anchor_point[i],nodes[attached_point[i]],num_seg)
+    new_mooring_point+=ml.tolist()
+mooringLine=[]
+for i in range(8):
+    for j in range(50):
+        mooringLine.append([j+i*51,j+1+i*51])
+
+
 
 
 # distance:
@@ -101,7 +115,6 @@ for i in range(8):
     for j in range(num_seg-1):
         lm.append([i*num_seg+num_body_point+j,i*num_seg+num_body_point+j+1])
     lm.append([i*num_seg+num_body_point+j+1,attached_point[i]])
-    
 l_all=l1+l2+l3+l5+lm
 
 ## face
